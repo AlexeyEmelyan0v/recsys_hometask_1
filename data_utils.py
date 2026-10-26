@@ -149,3 +149,15 @@ def evaluation_targets(holdout, users, items, seen, min_rating=4):
         "relevant_pairs": sum(map(len, targets.values())),
     }
     return targets, report
+
+
+def rating_time_targets(train, users, items, cutoff, half_life, min_rating=4):
+    positive = train[train.rating >= min_rating]
+    age_days = (cutoff - positive.timestamp.to_numpy()) / 86400
+    strength = (positive.rating.to_numpy() - 3) / 2
+    values = strength * np.exp2(-age_days / half_life)
+    return sparse.csr_matrix(
+        (values, (positive.user.map(users).to_numpy(dtype=np.int64),
+                  positive.item.map(items).to_numpy(dtype=np.int64))),
+        shape=(len(users), len(items)),
+    )
