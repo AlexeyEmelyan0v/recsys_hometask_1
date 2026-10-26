@@ -1,1 +1,12 @@
 hometask1.md
+data/
+results/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+*.json.gz
+*.jsonl.gz
+*.npz
+*.npy
